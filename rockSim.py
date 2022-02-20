@@ -4,7 +4,7 @@ import json
 import time
 import random
 
-ser = serial.Serial("COM7", baudrate=19200)
+ser = serial.Serial("COM6", baudrate=19200)
 
 ser.flushInput()
 
@@ -22,7 +22,8 @@ print("Listening to Gateway...")
 
 def decode():
     global bytes, postBuffer
-    ser_decode = ser_byte.decode("utf-8")
+    print(ser_byte)
+    ser_decode = ser_byte.decode("utf-8", "ignore")
 
     try:
         bytes = bytes + ser_decode
@@ -47,6 +48,7 @@ def decode():
                 time.sleep(random.randint(0, 100) / 1000)
                 postBuffer = bytes[9:]
                 print("\nPOST Buffer: ", end=postBuffer)
+                print("\nResponse: OK")
                 ser.write("\nOK\r\n".encode())
             elif bytes[0:8] == "AT+SBDIX":
                 if netCheck():
